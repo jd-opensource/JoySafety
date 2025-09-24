@@ -1,0 +1,2 @@
+safety/safety-skills/safety-knowledge/app/util/bge-small-zh-v1_5/model.onnx filter=lfs diff=lfs merge=lfs -text
+safety/safety-skills/safety-knowledge/app/util/bge-small-zh-v1_5/pytorch_model.bin filter=lfs diff=lfs merge=lfs -text

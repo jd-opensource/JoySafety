@@ -1,0 +1,14 @@
+# ignore file
+*.iml
+target/
+.idea/
+logs/
+*.classpath
+*.project
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
+app.log
+.__app.lock
+logs
+.joycode

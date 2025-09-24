@@ -1,0 +1,242 @@
+version: "3.9"
+
+networks:
+  joy_safety:
+    driver: bridge
+
+services:
+  safety-mysql:
+    container_name: safety-mysql
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/mysql:8.4.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: safety
+      MYSQL_USER: test
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#    ports:
+#      - 3306:3306
+    volumes:
+      - ./deploy/thirdparty/mysql/my.cnf:/etc/my.cnf.d/my.cnf
+      - ./safety/safety-admin/docs/tables.sql:/docker-entrypoint-initdb.d/01_tables.sql
+      - ./example/safety-admin/data/sensitive_words.sql:/docker-entrypoint-initdb.d/02_sensitive_words.sql
+      - ./example/safety-admin/data/red_line_knowledge.sql:/docker-entrypoint-initdb.d/03_red_line_knowledge.sql
+    networks:
+      - joy_safety
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_general_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "test", "-p${MYSQL_PASSWORD}"]
+      interval: 10s
+      timeout: 15s
+      retries: 10
+
+  safety-redis:
+    container_name: safety-redis
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/redis:8.2.1
+    restart: always
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+#    ports:
+#      - 6379:6379
+    networks:
+      - joy_safety
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+  safety-vearch:
+    container_name: safety-vearch
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/vearch/vearch:3.5.6
+    restart: always
+    command: ["all"]
+    ports:
+      - 8817:8817
+      - 9001:9001
+    volumes:
+      - ./deploy/thirdparty/vearch/config.toml:/vearch/config.toml
+    networks:
+      - joy_safety
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8817"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+  safety-admin:
+    container_name: safety-admin
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-admin-0.0.1
+    restart: always
+    depends_on:
+      safety-mysql:
+        condition: service_healthy
+      safety-vearch:
+        condition: service_started
+      safety-redis:
+        condition: service_started
+    environment:
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      ADMIN_APP_CONF_FILE: /work/conf/application_example.properties
+      ADMIN_LOG_CONF_FILE: /work/conf/log4j2-example.xml
+    ports:
+      - 8006:8006
+    volumes:
+      - ./example/safety-admin/conf:/work/conf
+      - ./example/safety-admin/logs:/work/logs
+    networks:
+      - joy_safety
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8006/health"] 
+#      interval: 10s
+#      timeout: 20s
+#      retries: 10
+
+  safety-api:
+    container_name: safety-api
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-api-0.0.1
+    restart: always
+    depends_on:
+      safety-admin:
+        condition: service_started
+      safety-redis:
+        condition: service_started
+      safety-mysql:
+        condition: service_healthy
+      safety-knowledge:
+        condition: service_healthy
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      API_APP_CONF_FILE: /work/conf/application_example.properties
+      API_LOG_CONF_FILE: /work/conf/log4j2-example.xml
+    ports:
+      - 8007:8007
+    volumes:
+      - ./example/safety-api/conf:/work/conf
+      - ./example/safety-api/logs:/work/logs
+    networks:
+      - joy_safety
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8007/health"]
+#      interval: 10s
+#      timeout: 20s
+#      retries: 10
+
+  safety-keywords:
+    container_name: safety-keywords
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-keywords-0.0.1
+    restart: always
+    depends_on:
+      safety-mysql:
+        condition: service_healthy
+    environment:
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      KEYWORD_APP_CONF_FILE: /work/conf/application_example.properties
+      KEYWORD_LOG_CONF_FILE: /work/conf/log4j2-example.xml
+    ports:
+      - 8005:8005
+    volumes:
+      - ./example/safety-skills/safety-keywords/conf:/work/conf
+      - ./example/safety-skills/safety-keywords/logs:/work/logs
+    networks:
+      - joy_safety
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+#      interval: 10s
+#      timeout: 20s
+#      retries: 10
+
+  safety-bert:
+    container_name: safety-bert
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-bert-0.0.1
+    restart: always
+    environment:
+      BERT_CONFIG_FILE: /work/conf/conf_example.json
+    ports:
+      - 8003:8003
+    volumes:
+      - ${SAFETY_MODEL_DIR}:/work/models
+      - ./example/safety-skills/safety-bert/conf:/work/conf
+    networks:
+      - joy_safety
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8003/health"]
+#      interval: 10s
+#      timeout: 20s
+#      retries: 10
+
+  safety-fasttext:
+    container_name: safety-fasttext
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-fasttext-0.0.1
+    restart: always
+    environment:
+      FASTTEXT_GUNICORN_CONF: /work/conf/gunicorn.conf.py
+      FASTTEXT_CONFIG: /work/conf/conf_example.json
+    ports:
+      - 8002:8002
+    volumes:
+      - ${SAFETY_MODEL_DIR}:/work/models
+      - ./example/safety-skills/safety-fasttext/conf:/work/conf
+    networks:
+      - joy_safety
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+#      interval: 10s
+#      timeout: 20s
+#      retries: 10
+
+  safety-knowledge:
+    container_name: safety-knowledge
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-knowledge-0.0.1
+    restart: always
+    depends_on:
+      safety-vearch:
+        condition: service_started
+      safety-admin:
+        condition: service_started
+    environment:
+      KG_CONFIG_FILE: /work/conf/config_example.py
+    ports:
+      - 8004:8004
+    volumes:
+      - ${SAFETY_MODEL_DIR}:/work/models
+      - ./example/safety-skills/safety-knowledge/conf:/work/conf
+    networks:
+      - joy_safety
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/healthcheck"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+
+  safety-example-init:
+    container_name: safety-example
+    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-knowledge-0.0.1
+    restart: always
+    depends_on:
+      safety-vearch:
+        condition: service_started
+      safety-admin:
+        condition: service_started
+      safety-knowledge:
+        condition: service_started
+      safety-keywords:
+        condition: service_started
+      safety-api:
+        condition: service_started
+    environment:
+      KG_CONFIG_FILE: /work/conf/config_example.py
+    volumes:
+      - ${SAFETY_MODEL_DIR}:/work/models
+      - ./example/safety-skills/safety-knowledge/conf:/work/conf
+      - ./example/safety-skills/safety-knowledge/index_all.py:/work/index_all.py
+      - ./example/safety-skills/safety-knowledge/vearch_manage.py:/work/vearch_manage.py
+      - ./example/safety-skills/safety-knowledge/skills_init.py:/work/skills_init.py
+      - ./example/safety-skills/safety-knowledge/business_init.py:/work/business_init.py
+      - ./example/safety-skills/safety-knowledge/strategy_example.yml:/work/strategy_example.yml
+      - ./example/safety-skills/safety-knowledge/strategy_init.py:/work/strategy_init.py
+    networks:
+      - joy_safety
+    command: >
+      /work/run.sh sh -c "sleep 30 && python /work/vearch_manage.py && python /work/index_all.py && python /work/skills_init.py && python /work/business_init.py && python /work/strategy_init.py"
