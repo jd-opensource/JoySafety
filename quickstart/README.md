@@ -18,6 +18,7 @@ docker cp quickstart/api_test.py safety-knowledge:/work/api_test.py
 ### case1: 识别为正常
 
 ```shell
+# 报错'token错误/业务不存在'时可以等待30s重试
 docker exec -it safety-knowledge python /work/api_test.py '你好'
 ```
 输入示例：
