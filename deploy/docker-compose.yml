@@ -1,0 +1,150 @@
+# 需要定义`SAFETY_MODEL_DIR`
+# 需要定义`REDIS_PASSWORD`
+# 需要定义`MYSQL_ROOT_PASSWORD`
+# 需要定义`MYSQL_PASSWORD`
+version: "3.9"
+
+services:
+  safety-mysql:
+    container_name: safety-mysql
+    image: container-registry.oracle.com/mysql/community-server:8.4
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: safety
+      MYSQL_USER: test
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - ./thirdparty/mysql/data:/var/lib/mysql
+      - ./thirdparty/mysql/my.cnf:/etc/my.cnf
+    networks:
+      - default
+
+  safety-redis:
+    container_name: safety-redis
+    image: redis:8.2.1
+    restart: always
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    ports:
+      - 6379:6379
+    networks:
+      - default
+
+  safety-vearch:
+    container_name: safety-vearch
+    image: vearch/vearch:3.5.6
+    restart: always
+    command:
+      - all
+    ports:
+      - 8817:8817
+      - 9001:9001
+    volumes:
+      - ./thirdparty/vearch/config.toml:/vearch/config.toml
+    networks:
+      - default
+
+  safety-fasttext:
+    container_name: safety-fasttext
+    image: safety-fasttext:0.1
+    restart: always
+    environment:
+      FASTTEXT_GUNICORN_CONF: /work/conf/gunicorn.conf.py
+      FASTTEXT_CONFIG: /work/conf/docs/conf_example1.json
+    ports:
+      - 8002:8002
+    volumes:
+      - "${SAFETY_MODEL_DIR}:/work/models"
+      - ../safety/safety-skills/safety-fasttext:/work/conf
+    networks:
+      - default
+
+  safety-bert:
+    container_name: safety-bert
+    image: safety-bert:0.1
+    restart: always
+    environment:
+      BERT_CONFIG_FILE: /work/conf/docs/conf_example.json
+    ports:
+      - 8003:8003
+    volumes:
+      - "${SAFETY_MODEL_DIR}:/work/models"
+      - ../safety/safety-skills/safety-bert:/work/conf
+    networks:
+      - default
+
+  safety-knowledge:
+    container_name: safety-knowledge
+    image: safety-knowledge:0.1
+    restart: always
+    depends_on:
+      safety-vearch:
+        condition: service_healthy
+    environment:
+      KG_CONFIG_FILE: /work/conf/docs/config_example.py
+    ports:
+      - 8004:8004
+    volumes:
+      - "${SAFETY_MODEL_DIR}:/work/models"
+      - ../safety/safety-skills/safety-knowledge:/work/conf
+    networks:
+      - default
+
+  safety-keywords:
+    container_name: safety-keywords
+    image: safety-keywords:0.1
+    restart: always
+    depends_on:
+      safety-mysql:
+        condition: service_healthy
+    environment:
+      KEYWORD_APP_CONF_FILE: /work/conf/docs/application_example.properties
+      KEYWORD_LOG_CONF_FILE: /work/conf/docs/log4j2-example.xml
+    ports:
+      - 8005:8005
+    volumes:
+      - ../safety/safety-skills/safety-keywords:/work/conf
+      - ../safety/safety-skills/safety-keywords:/work/logs
+    networks:
+      - default
+
+  safety-admin:
+    container_name: safety-admin
+    image: safety-admin:0.1
+    restart: always
+    depends_on:
+      safety-mysql:
+        condition: service_healthy
+    environment:
+      ADMIN_APP_CONF_FILE: /work/conf/docs/application_example.properties
+      ADMIN_LOG_CONF_FILE: /work/conf/docs/log4j2-example.xml
+    ports:
+      - 8006:8006
+    volumes:
+      - ../safety/safety-admin:/work/conf
+      - ../safety/safety-admin:/work/logs
+    networks:
+      - default
+
+  safety-api:
+    container_name: safety-api
+    image: safety-api:0.1
+    restart: always
+    depends_on:
+      safety-admin:
+        condition: service_healthy
+      safety-redis:
+        condition: service_healthy
+    environment:
+      ADMIN_APP_CONF_FILE: /work/conf/docs/application_example.properties
+      ADMIN_LOG_CONF_FILE: /work/conf/docs/log4j2-example.xml
+    ports:
+      - 8007:8007
+    volumes:
+      - ../safety/safety-api:/work/conf
+      - ../safety/safety-api:/work/logs
+    networks:
+      - default
