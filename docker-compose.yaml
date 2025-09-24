@@ -80,6 +80,10 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       ADMIN_APP_CONF_FILE: /work/conf/application_example.properties
       ADMIN_LOG_CONF_FILE: /work/conf/log4j2-example.xml
+    command: >
+      /work/run.sh sh -c "sleep 30 && java $JAVA_OPTS -jar /work/LlmSecAdmin.jar \
+      --spring.config.location=/work/conf/application_example.properties \
+      --logging.config=file:/work/conf/log4j2-example.xml"
     ports:
       - 8006:8006
     volumes:
@@ -110,6 +114,10 @@ services:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
       API_APP_CONF_FILE: /work/conf/application_example.properties
       API_LOG_CONF_FILE: /work/conf/log4j2-example.xml
+    command: >
+      /work/run.sh sh -c "sleep 60 && java $JAVA_OPTS -jar /work/LlmSecDefenseApi.jar \
+      --spring.config.location=/work/conf/application_example.properties \
+      --logging.config=file:/work/conf/log4j2-example.xml"
     ports:
       - 8007:8007
     volumes:
@@ -142,12 +150,8 @@ services:
     networks:
       - joy_safety
     command: >
-      /work/run.sh sh -c "sleep 12s; python main.py"
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
-#      interval: 10s
-#      timeout: 20s
-#      retries: 10
+      /work/run.sh sh -c "sleep 30 && java $JAVA_OPTS -jar /work/LlmSecSensitiveWeb.jar \
+      --spring.config.location=/work/conf/application_example.properties --logging.config=file:/work/conf/log4j2-example.xml"
 
   safety-bert:
     container_name: safety-bert
@@ -241,5 +245,6 @@ services:
     networks:
       - joy_safety
     command: >
-      /work/run.sh sh -c "sleep 30 && python /work/vearch_manage.py && python /work/index_all.py && python /work/skills_init.py && python /work/business_init.py && python /work/strategy_init.py && sleep 5s && echo '==========================================================SUCCESS=================================================
-============'"
+      /work/run.sh sh -c "sleep 60 && python /work/vearch_manage.py && python /work/index_all.py \
+      && python /work/skills_init.py && python /work/business_init.py && python /work/strategy_init.py \
+      && sleep 5s && echo '==============SUCCESS==================='"
