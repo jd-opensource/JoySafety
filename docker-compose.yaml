@@ -49,8 +49,8 @@ services:
 
   safety-vearch:
     container_name: safety-vearch
-    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/vearch/vearch:3.5.6
-    restart: always
+    image: vearch/vearch:3.5.6
+    #restart: always
     command: ["all"]
     ports:
       - 8817:8817
@@ -68,7 +68,7 @@ services:
   safety-admin:
     container_name: safety-admin
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-admin-0.0.1
-    restart: always
+    #restart: always
     depends_on:
       safety-mysql:
         condition: service_healthy
@@ -96,7 +96,7 @@ services:
   safety-api:
     container_name: safety-api
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-api-0.0.1
-    restart: always
+    #restart: always
     depends_on:
       safety-admin:
         condition: service_started
@@ -126,7 +126,7 @@ services:
   safety-keywords:
     container_name: safety-keywords
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-keywords-0.0.1
-    restart: always
+    #restart: always
     depends_on:
       safety-mysql:
         condition: service_healthy
@@ -141,6 +141,8 @@ services:
       - ./example/safety-skills/safety-keywords/logs:/work/logs
     networks:
       - joy_safety
+    command: >
+      /work/run.sh sh -c "sleep 12s; python main.py"
 #    healthcheck:
 #      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
 #      interval: 10s
@@ -150,7 +152,7 @@ services:
   safety-bert:
     container_name: safety-bert
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-bert-0.0.1
-    restart: always
+    #restart: always
     environment:
       BERT_CONFIG_FILE: /work/conf/conf_example.json
     ports:
@@ -169,7 +171,7 @@ services:
   safety-fasttext:
     container_name: safety-fasttext
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-fasttext-0.0.1
-    restart: always
+    #restart: always
     environment:
       FASTTEXT_GUNICORN_CONF: /work/conf/gunicorn.conf.py
       FASTTEXT_CONFIG: /work/conf/conf_example.json
@@ -189,7 +191,7 @@ services:
   safety-knowledge:
     container_name: safety-knowledge
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-knowledge-0.0.1
-    restart: always
+    #restart: always
     depends_on:
       safety-vearch:
         condition: service_started
@@ -213,7 +215,7 @@ services:
   safety-example-init:
     container_name: safety-example
     image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-knowledge-0.0.1
-    restart: always
+    #restart: always
     depends_on:
       safety-vearch:
         condition: service_started
@@ -239,4 +241,5 @@ services:
     networks:
       - joy_safety
     command: >
-      /work/run.sh sh -c "sleep 30 && python /work/vearch_manage.py && python /work/index_all.py && python /work/skills_init.py && python /work/business_init.py && python /work/strategy_init.py"
+      /work/run.sh sh -c "sleep 30 && python /work/vearch_manage.py && python /work/index_all.py && python /work/skills_init.py && python /work/business_init.py && python /work/strategy_init.py && sleep 5s && echo '==========================================================SUCCESS=================================================
+============'"
