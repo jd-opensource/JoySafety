@@ -155,7 +155,8 @@
 - 策略编排参考：[dag_api.md](safety/safety-admin/docs/api/dag_api.md)、[策略样例](safety/safety-admin/docs/strategies)
 
 ### FAQ
-常见问题与解决方案见 [FAQ](./docs/FAQ.md)（待补充）
+常见问题与解决方案见 [FAQ](./docs/FAQ.md)
+
 基于产品特性，项目中的示例仅用于产品功能说明使用，不得用于其他领域，非项目开发者观点。
 
 ---
