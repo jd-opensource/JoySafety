@@ -1,0 +1,12 @@
+concurrent-log-handler
+tornado
+pyvearch
+sentence-transformers
+numpy==1.21.6
+# onnxruntime==1.18.1
+onnxruntime==1.16.3
+pydantic
+pandas
+openai
+mysql-connector-python
+pyyaml

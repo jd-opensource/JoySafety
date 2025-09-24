@@ -1,0 +1,1 @@
+docker build --progress=plain -t safety-fasttext:0.0.1 ..

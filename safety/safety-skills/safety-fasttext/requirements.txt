@@ -1,0 +1,6 @@
+gunicorn
+Flask
+jieba
+numpy==1.26.4
+fasttext
+concurrent-log-handler

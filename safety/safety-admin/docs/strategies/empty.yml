@@ -1,0 +1,17 @@
+businessName: test_empty
+group: default
+desc: '空策略'
+rootId: start
+version: 1
+status: online
+confArray:
+  - nodeId: start
+    functionConf:
+      type: dummy
+      name: dummy
+      timeoutMilliseconds: 5
+      conf: {}
+    routerConf:
+      type: stupid_end
+      name: stupid_end
+    ignoreError: true

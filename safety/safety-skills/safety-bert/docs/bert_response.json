@@ -1,0 +1,80 @@
+{
+  "code": 0,
+  "message": "success",
+  "cost": 0.1301419734954834,
+  "data": [
+    {
+      "riskCode": 0,
+      "riskMessage": "0正常文本",
+      "probability": 0.9997712969779968,
+      "detail": [
+        {
+          "riskCode": 0,
+          "riskMessage": "0正常文本",
+          "probability": 0.9997712969779968
+        },
+        {
+          "riskCode": 201,
+          "riskMessage": "201提示词注入",
+          "probability": 0.00007535521581303328
+        },
+        {
+          "riskCode": 1001,
+          "riskMessage": "1001涉政",
+          "probability": 0.00003668907083920203
+        },
+        {
+          "riskCode": 1002,
+          "riskMessage": "1002暴恐",
+          "probability": 0.000011556393474165816
+        },
+        {
+          "riskCode": 1003,
+          "riskMessage": "1003涉黄",
+          "probability": 0.000012607431926880963
+        },
+        {
+          "riskCode": 1004,
+          "riskMessage": "1004涉赌",
+          "probability": 0.000002889602683353587
+        },
+        {
+          "riskCode": 1005,
+          "riskMessage": "1005涉毒",
+          "probability": 0.000003288543894086615
+        },
+        {
+          "riskCode": 1006,
+          "riskMessage": "1006辱骂",
+          "probability": 0.00003411185389268212
+        },
+        {
+          "riskCode": 2001,
+          "riskMessage": "2001歧视性内容",
+          "probability": 0.000007019421900622547
+        },
+        {
+          "riskCode": 3002,
+          "riskMessage": "3002其他商业违法违规",
+          "probability": 0.000004478236860450124
+        },
+        {
+          "riskCode": 4002,
+          "riskMessage": "4002其他侵犯他人权益",
+          "probability": 0.000004307996732677566
+        },
+        {
+          "riskCode": 5001,
+          "riskMessage": "5001违禁",
+          "probability": 0.00003421950532356277
+        },
+        {
+          "riskCode": 5002,
+          "riskMessage": "5002虚假信息传播",
+          "probability": 0.000002161772272302187
+        }
+      ],
+      "text": "你好"
+    }
+  ]
+}

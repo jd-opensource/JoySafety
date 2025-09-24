@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+<!--    https://mybatis.org/generator/configreference/xmlconfig.html -->
+<!--    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />-->
+<!--    <properties resource="application_example.properties"/>-->
+    <context id="mysql_data" targetRuntime="MyBatis3">
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://mysql:3306/safety?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=UTC"
+                        userId="test"
+                        password="123456">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+<!--        <javaModelGenerator targetPackage="com.jd.security.llmsec.data.pojo" targetProject="\MBGTestProject\src">-->
+        <javaModelGenerator targetPackage="com.jd.security.llmsec.data.pojo" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="com.jd.security.llmsec.data.mapper"  targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.jd.security.llmsec.data.mapper"  targetProject="src/main/java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+
+        <table tableName="business_info" domainObjectName="BusinessInfo" delimitAllColumns="true">
+                <property name="useActualColumnNames" value="false"/>
+                <generatedKey column="id" sqlStatement="Mysql" identity="true" />
+        </table>
+
+<!--        <table tableName="function_conf" domainObjectName="FunctionConf" delimitAllColumns="true" >-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
+<!--        </table>-->
+
+<!--        <table tableName="execute_dag_conf" domainObjectName="ExecuteDagConf" delimitAllColumns="true">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
+<!--        </table>-->
+
+<!--        <table tableName="sensitive_words" domainObjectName="SensitiveWords" delimitAllColumns="true">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
+<!--        </table>-->
+
+<!--        <table tableName="red_line_knowledge" domainObjectName="RedLineKnowledge" delimitAllColumns="true">-->
+<!--            <property name="useActualColumnNames" value="false"/>-->
+<!--            <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
+<!--        </table>-->
+
+<!--                <table tableName="`dag_templates`" domainObjectName="DagTemplates" delimitAllColumns="true">-->
+<!--                    <property name="useActualColumnNames" value="false"/>-->
+<!--                    <generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
+<!--                </table>-->
+
+    </context>
+</generatorConfiguration>

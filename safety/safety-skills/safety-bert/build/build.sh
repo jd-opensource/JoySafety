@@ -1,0 +1,1 @@
+docker build --progress=plain -t safety-bert:0.0.1 ..

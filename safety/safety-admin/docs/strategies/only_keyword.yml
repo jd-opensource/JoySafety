@@ -1,0 +1,13 @@
+businessName: keyword_only
+group: default
+desc: '仅敏感词'
+rootId: start
+version: 1
+confArray:
+  - nodeId: start
+    functionConf:
+      ref: keyword
+    routerConf:
+      type: stupid_end
+      name: stupid_end
+    ignoreError: true

@@ -1,0 +1,88 @@
+{
+  "debug": false,
+  "process_num": 1,
+  "bert": [
+    {
+      "name": "bert_prompt_injection_20250828",
+      "model_path": "/work/models/bert_prompt_injection_20250828/model",
+      "tokenizer_path": "/work/models/bert_prompt_injection_20250828/tokenizer",
+      "device_type": "cpu",
+      "num_labels": 2,
+      "labels": [
+        {
+          "riskCode": 0,
+          "riskMessage": "0正常文本"
+        },
+        {
+          "riskCode": 201,
+          "riskMessage": "201提示词注入"
+        }
+      ]
+    },
+    {
+      "name": "bert_20250916",
+      "model_path": "/work/models/bert_20250916/model",
+      "tokenizer_path": "/work/models/bert_20250916/tokenizer",
+      "device_type": "cpu",
+      "num_labels": 14,
+      "labels": [
+        {
+          "riskCode": 0,
+          "riskMessage": "0正常文本"
+        },
+        {
+          "riskCode": 1001,
+          "riskMessage": "1001涉政"
+        },
+        {
+          "riskCode": 1002,
+          "riskMessage": "1002暴恐"
+        },
+        {
+          "riskCode": 1003,
+          "riskMessage": "1003涉黄"
+        },
+        {
+          "riskCode": 1004,
+          "riskMessage": "1004涉赌"
+        },
+        {
+          "riskCode": 1005,
+          "riskMessage": "1005涉毒"
+        },
+        {
+          "riskCode": 1006,
+          "riskMessage": "1006辱骂"
+        },
+        {
+          "riskCode": 2001,
+          "riskMessage": "2001歧视性内容"
+        },
+        {
+          "riskCode": 3002,
+          "riskMessage": "3002其他商业违法违规"
+        },
+        {
+          "riskCode": 4002,
+          "riskMessage": "4002其他侵犯他人权益"
+        },
+        {
+          "riskCode": 5001,
+          "riskMessage": "5001违禁"
+        },
+        {
+          "riskCode": 5002,
+          "riskMessage": "5002虚假信息传播"
+        },
+        {
+          "riskCode": 1007,
+          "riskMessage": "1007两性健康"
+        },
+        {
+          "riskCode": 1008,
+          "riskMessage": "1008政治非拒答"
+        }
+      ]
+    }
+  ]
+}

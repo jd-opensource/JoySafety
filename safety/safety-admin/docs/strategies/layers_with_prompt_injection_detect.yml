@@ -1,0 +1,112 @@
+businessName: test
+group: default
+desc: '提示词注入检测的纵深防御策略'
+rootId: start
+confArray:
+  - nodeId: start
+    functionConf:
+      type: dummy
+      name: dummy
+      timeoutMilliseconds: 5
+      conf: {}
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          def from_robot=ctx.curReq[0].fromRobot()
+          if (from_robot) {
+              return 'from_robot_test1'
+          } else {
+              return 'from_user_test1'
+          }
+    ignoreError: true
+  - nodeId: from_user_test1
+    functionConf:
+      type: parallel
+      name: parallel_from_user_test1
+      timeoutMilliseconds: 200
+      conf:
+        functionConfs:
+          - ref: keyword
+          - ref: fast20250710
+            conf:
+              ignoreRiskCode:
+                - 1006
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          import com.jd.security.llmsec.core.check.MixedCheck
+          def retMap=ctx.curResult.resultMap
+          def next="from_user_test_bert2"
+          def kw = retMap.keyword
+          def fast = retMap.fast20250710
+          
+          if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2 )){
+              ctx.curResult = kw
+              return null
+          } else if (kw != null && kw.bwgLabel == 3){
+              return next
+          } else if (fast != null) {
+              if (!fast.hasRisk() && fast.probability > 0.9) {
+                ctx.curResult = fast
+                return null
+              } else {
+                return next
+              }
+          }
+          if (kw == null || fast == null) {
+            ctx.curResult = MixedCheck.noRisk()
+            return null
+          }
+          return next
+    ignoreError: true
+  - nodeId: from_user_test_bert2
+    functionConf:
+      type: parallel
+      name: parallel_from_user_test_bert2
+      timeoutMilliseconds: 1000
+      conf:
+        functionConfs:
+          - ref: bert_20250916
+            conf:
+              ignoreRiskCode:
+                - 1006
+          - ref: bert_prompt_injection_20250828
+            conf:
+              ignoreRiskCode:
+                - 1006
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          import com.jd.security.llmsec.core.check.MixedCheck
+            def retMap=ctx.curResult.resultMap
+            def bert_common = retMap.bert_20250916
+            def bert_inject = retMap.bert_prompt_injection_20250828
+            if ((bert_common == null || (bert_common != null && !bert_common.hasRisk())) && (bert_inject == null || (bert_inject != null && !bert_inject.hasRisk()))) {
+            ctx.curResult = MixedCheck.noRisk()
+            return null
+          }
+          def thresholds_common = [0:0.9, 1001:0.9, 1002:0.9, 1003:0.9, 1004:0.9, 1005:0.9, 1006:0.9, 1007:0.9, 2001:0.9, 3002:0.9, 4002:0.9, 5001:0.9, 5002:0.9]
+          def thresholds_inject = [0:0.9, 201:0.9]
+          
+          if (bert_common.hasRisk() && bert_common.probability >= thresholds_common[bert_common.riskCode]) {
+            ctx.curResult = bert_common
+          }else if(bert_inject.probability >= thresholds_inject[bert_inject.riskCode]){
+            ctx.curResult = bert_inject
+          } else {
+            ctx.curResult = MixedCheck.noRisk()
+          }
+          return null
+    ignoreError: true
+  - nodeId: from_robot_test1
+    functionConf:
+      ref: keyword
+    routerConf:
+      type: stupid_end
+      name: stupid_end
+    ignoreError: true

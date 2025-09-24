@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <!--    https://logging.apache.org/log4j/2.x/log4j-spring-boot.html -->
+    <Properties>
+        <Property name="LOG_HOME">${env:LOG_HOME_DIR:-./logs}</Property>
+        <property name="patternLayout">%d{yyyy/MM/dd HH:mm:ss,SSS} | %highlight{%-5p} | %-6T | %-15t | %c{1.3.*}:%L | %m%n</property>
+        <property name="Level">INFO</property>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
+        </Console>
+
+        <RollingRandomAccessFile name="error" fileName="${LOG_HOME}/error.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+
+        <!-- all级别日志 -->
+        <RollingRandomAccessFile name="allFileAppender" fileName="${LOG_HOME}/app.log" filePattern="${LOG_HOME}/$${date:yyyy-MM}/app-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout charset="UTF-8" pattern="${patternLayout}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.jd" level="${Level}"  additivity="false">
+            <AppenderRef ref="allFileAppender"/>
+        </Logger>
+        <Logger name="com.jd" level="${Level}"  additivity="false">
+            <AppenderRef ref="allFileAppender"/>
+        </Logger>
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="allFileAppender"/>
+        </Logger>
+        <Logger name="org.mybatis" level="${Level}" additivity="false">
+            <AppenderRef ref="allFileAppender"/>
+        </Logger>
+        <Logger name="com.mysql" level="${Level}" additivity="false">
+            <AppenderRef ref="allFileAppender"/>
+        </Logger>
+        <Root level="${Level}" additivity="false">
+            <AppenderRef ref="allFileAppender" level="${Level}"/>
+            <AppenderRef ref="console" level="ERROR" />
+            <AppenderRef ref="error" level="ERROR"/>
+
+        </Root>
+    </Loggers>
+</Configuration>

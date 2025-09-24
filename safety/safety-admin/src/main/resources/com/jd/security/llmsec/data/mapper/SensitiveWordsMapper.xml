@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.security.llmsec.data.mapper.SensitiveWordsMapper">
+  <resultMap id="BaseResultMap" type="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uniq_id" jdbcType="VARCHAR" property="uniqId" />
+    <result column="business_scene" jdbcType="VARCHAR" property="businessScene" />
+    <result column="word" jdbcType="VARCHAR" property="word" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="class_no" jdbcType="VARCHAR" property="classNo" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="match_type" jdbcType="VARCHAR" property="matchType" />
+    <result column="handle_strategy" jdbcType="VARCHAR" property="handleStrategy" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="editor_erp" jdbcType="VARCHAR" property="editorErp" />
+    <result column="editor_name" jdbcType="VARCHAR" property="editorName" />
+    <result column="auditor_erp" jdbcType="VARCHAR" property="auditorErp" />
+    <result column="auditor_name" jdbcType="VARCHAR" property="auditorName" />
+    <result column="release_erp" jdbcType="VARCHAR" property="releaseErp" />
+    <result column="release_name" jdbcType="VARCHAR" property="releaseName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="first_class_name" jdbcType="VARCHAR" property="firstClassName" />
+    <result column="first_class_no" jdbcType="INTEGER" property="firstClassNo" />
+    <result column="second_class_name" jdbcType="VARCHAR" property="secondClassName" />
+    <result column="second_class_no" jdbcType="INTEGER" property="secondClassNo" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    <result column="desc" jdbcType="LONGVARCHAR" property="desc" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `id`, `uniq_id`, `business_scene`, `word`, `class_name`, `class_no`, `tags`, `match_type`, 
+    `handle_strategy`, `source`, `version`, `status`, `editor_erp`, `editor_name`, `auditor_erp`, 
+    `auditor_name`, `release_erp`, `release_name`, `create_time`, `update_time`, `first_class_name`, 
+    `first_class_no`, `second_class_name`, `second_class_no`
+  </sql>
+  <sql id="Blob_Column_List">
+    `desc`
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sensitive_words
+    where `id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sensitive_words
+    where `id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample">
+    delete from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sensitive_words (`uniq_id`, `business_scene`, `word`, 
+      `class_name`, `class_no`, `tags`, 
+      `match_type`, `handle_strategy`, `source`, 
+      `version`, `status`, `editor_erp`, 
+      `editor_name`, `auditor_erp`, `auditor_name`, 
+      `release_erp`, `release_name`, `create_time`, 
+      `update_time`, `first_class_name`, `first_class_no`, 
+      `second_class_name`, `second_class_no`, `desc`
+      )
+    values (#{uniqId,jdbcType=VARCHAR}, #{businessScene,jdbcType=VARCHAR}, #{word,jdbcType=VARCHAR}, 
+      #{className,jdbcType=VARCHAR}, #{classNo,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
+      #{matchType,jdbcType=VARCHAR}, #{handleStrategy,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{editorErp,jdbcType=VARCHAR}, 
+      #{editorName,jdbcType=VARCHAR}, #{auditorErp,jdbcType=VARCHAR}, #{auditorName,jdbcType=VARCHAR}, 
+      #{releaseErp,jdbcType=VARCHAR}, #{releaseName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{firstClassName,jdbcType=VARCHAR}, #{firstClassNo,jdbcType=INTEGER}, 
+      #{secondClassName,jdbcType=VARCHAR}, #{secondClassNo,jdbcType=INTEGER}, #{desc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sensitive_words
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uniqId != null">
+        `uniq_id`,
+      </if>
+      <if test="businessScene != null">
+        `business_scene`,
+      </if>
+      <if test="word != null">
+        `word`,
+      </if>
+      <if test="className != null">
+        `class_name`,
+      </if>
+      <if test="classNo != null">
+        `class_no`,
+      </if>
+      <if test="tags != null">
+        `tags`,
+      </if>
+      <if test="matchType != null">
+        `match_type`,
+      </if>
+      <if test="handleStrategy != null">
+        `handle_strategy`,
+      </if>
+      <if test="source != null">
+        `source`,
+      </if>
+      <if test="version != null">
+        `version`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="editorErp != null">
+        `editor_erp`,
+      </if>
+      <if test="editorName != null">
+        `editor_name`,
+      </if>
+      <if test="auditorErp != null">
+        `auditor_erp`,
+      </if>
+      <if test="auditorName != null">
+        `auditor_name`,
+      </if>
+      <if test="releaseErp != null">
+        `release_erp`,
+      </if>
+      <if test="releaseName != null">
+        `release_name`,
+      </if>
+      <if test="createTime != null">
+        `create_time`,
+      </if>
+      <if test="updateTime != null">
+        `update_time`,
+      </if>
+      <if test="firstClassName != null">
+        `first_class_name`,
+      </if>
+      <if test="firstClassNo != null">
+        `first_class_no`,
+      </if>
+      <if test="secondClassName != null">
+        `second_class_name`,
+      </if>
+      <if test="secondClassNo != null">
+        `second_class_no`,
+      </if>
+      <if test="desc != null">
+        `desc`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uniqId != null">
+        #{uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScene != null">
+        #{businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="word != null">
+        #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classNo != null">
+        #{classNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="matchType != null">
+        #{matchType,jdbcType=VARCHAR},
+      </if>
+      <if test="handleStrategy != null">
+        #{handleStrategy,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="editorErp != null">
+        #{editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="editorName != null">
+        #{editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorErp != null">
+        #{auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorName != null">
+        #{auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseErp != null">
+        #{releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseName != null">
+        #{releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstClassName != null">
+        #{firstClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClassNo != null">
+        #{firstClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="secondClassName != null">
+        #{secondClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondClassNo != null">
+        #{secondClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample" resultType="java.lang.Long">
+    select count(*) from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sensitive_words
+    <set>
+      <if test="row.id != null">
+        `id` = #{row.id,jdbcType=BIGINT},
+      </if>
+      <if test="row.uniqId != null">
+        `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.businessScene != null">
+        `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="row.word != null">
+        `word` = #{row.word,jdbcType=VARCHAR},
+      </if>
+      <if test="row.className != null">
+        `class_name` = #{row.className,jdbcType=VARCHAR},
+      </if>
+      <if test="row.classNo != null">
+        `class_no` = #{row.classNo,jdbcType=VARCHAR},
+      </if>
+      <if test="row.tags != null">
+        `tags` = #{row.tags,jdbcType=VARCHAR},
+      </if>
+      <if test="row.matchType != null">
+        `match_type` = #{row.matchType,jdbcType=VARCHAR},
+      </if>
+      <if test="row.handleStrategy != null">
+        `handle_strategy` = #{row.handleStrategy,jdbcType=VARCHAR},
+      </if>
+      <if test="row.source != null">
+        `source` = #{row.source,jdbcType=VARCHAR},
+      </if>
+      <if test="row.version != null">
+        `version` = #{row.version,jdbcType=INTEGER},
+      </if>
+      <if test="row.status != null">
+        `status` = #{row.status,jdbcType=VARCHAR},
+      </if>
+      <if test="row.editorErp != null">
+        `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.editorName != null">
+        `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.auditorErp != null">
+        `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.auditorName != null">
+        `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.releaseErp != null">
+        `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.releaseName != null">
+        `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createTime != null">
+        `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.firstClassName != null">
+        `first_class_name` = #{row.firstClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.firstClassNo != null">
+        `first_class_no` = #{row.firstClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="row.secondClassName != null">
+        `second_class_name` = #{row.secondClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.secondClassNo != null">
+        `second_class_no` = #{row.secondClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="row.desc != null">
+        `desc` = #{row.desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update sensitive_words
+    set `id` = #{row.id,jdbcType=BIGINT},
+      `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      `word` = #{row.word,jdbcType=VARCHAR},
+      `class_name` = #{row.className,jdbcType=VARCHAR},
+      `class_no` = #{row.classNo,jdbcType=VARCHAR},
+      `tags` = #{row.tags,jdbcType=VARCHAR},
+      `match_type` = #{row.matchType,jdbcType=VARCHAR},
+      `handle_strategy` = #{row.handleStrategy,jdbcType=VARCHAR},
+      `source` = #{row.source,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
+      `status` = #{row.status,jdbcType=VARCHAR},
+      `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      `first_class_name` = #{row.firstClassName,jdbcType=VARCHAR},
+      `first_class_no` = #{row.firstClassNo,jdbcType=INTEGER},
+      `second_class_name` = #{row.secondClassName,jdbcType=VARCHAR},
+      `second_class_no` = #{row.secondClassNo,jdbcType=INTEGER},
+      `desc` = #{row.desc,jdbcType=LONGVARCHAR}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sensitive_words
+    set `id` = #{row.id,jdbcType=BIGINT},
+      `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      `word` = #{row.word,jdbcType=VARCHAR},
+      `class_name` = #{row.className,jdbcType=VARCHAR},
+      `class_no` = #{row.classNo,jdbcType=VARCHAR},
+      `tags` = #{row.tags,jdbcType=VARCHAR},
+      `match_type` = #{row.matchType,jdbcType=VARCHAR},
+      `handle_strategy` = #{row.handleStrategy,jdbcType=VARCHAR},
+      `source` = #{row.source,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
+      `status` = #{row.status,jdbcType=VARCHAR},
+      `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      `first_class_name` = #{row.firstClassName,jdbcType=VARCHAR},
+      `first_class_no` = #{row.firstClassNo,jdbcType=INTEGER},
+      `second_class_name` = #{row.secondClassName,jdbcType=VARCHAR},
+      `second_class_no` = #{row.secondClassNo,jdbcType=INTEGER}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    update sensitive_words
+    <set>
+      <if test="uniqId != null">
+        `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScene != null">
+        `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="word != null">
+        `word` = #{word,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        `class_name` = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classNo != null">
+        `class_no` = #{classNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        `tags` = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="matchType != null">
+        `match_type` = #{matchType,jdbcType=VARCHAR},
+      </if>
+      <if test="handleStrategy != null">
+        `handle_strategy` = #{handleStrategy,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        `source` = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        `version` = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="editorErp != null">
+        `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="editorName != null">
+        `editor_name` = #{editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorErp != null">
+        `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorName != null">
+        `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseErp != null">
+        `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseName != null">
+        `release_name` = #{releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstClassName != null">
+        `first_class_name` = #{firstClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClassNo != null">
+        `first_class_no` = #{firstClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="secondClassName != null">
+        `second_class_name` = #{secondClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="secondClassNo != null">
+        `second_class_no` = #{secondClassNo,jdbcType=INTEGER},
+      </if>
+      <if test="desc != null">
+        `desc` = #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    update sensitive_words
+    set `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      `word` = #{word,jdbcType=VARCHAR},
+      `class_name` = #{className,jdbcType=VARCHAR},
+      `class_no` = #{classNo,jdbcType=VARCHAR},
+      `tags` = #{tags,jdbcType=VARCHAR},
+      `match_type` = #{matchType,jdbcType=VARCHAR},
+      `handle_strategy` = #{handleStrategy,jdbcType=VARCHAR},
+      `source` = #{source,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{releaseName,jdbcType=VARCHAR},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      `first_class_name` = #{firstClassName,jdbcType=VARCHAR},
+      `first_class_no` = #{firstClassNo,jdbcType=INTEGER},
+      `second_class_name` = #{secondClassName,jdbcType=VARCHAR},
+      `second_class_no` = #{secondClassNo,jdbcType=INTEGER},
+      `desc` = #{desc,jdbcType=LONGVARCHAR}
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWords">
+    update sensitive_words
+    set `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      `word` = #{word,jdbcType=VARCHAR},
+      `class_name` = #{className,jdbcType=VARCHAR},
+      `class_no` = #{classNo,jdbcType=VARCHAR},
+      `tags` = #{tags,jdbcType=VARCHAR},
+      `match_type` = #{matchType,jdbcType=VARCHAR},
+      `handle_strategy` = #{handleStrategy,jdbcType=VARCHAR},
+      `source` = #{source,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{releaseName,jdbcType=VARCHAR},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      `first_class_name` = #{firstClassName,jdbcType=VARCHAR},
+      `first_class_no` = #{firstClassNo,jdbcType=INTEGER},
+      `second_class_name` = #{secondClassName,jdbcType=VARCHAR},
+      `second_class_no` = #{secondClassNo,jdbcType=INTEGER}
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.SensitiveWordsExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sensitive_words
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

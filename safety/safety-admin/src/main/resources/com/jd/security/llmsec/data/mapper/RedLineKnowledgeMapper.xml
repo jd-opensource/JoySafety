@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.security.llmsec.data.mapper.RedLineKnowledgeMapper">
+  <resultMap id="BaseResultMap" type="com.jd.security.llmsec.data.pojo.RedLineKnowledge">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uniq_id" jdbcType="VARCHAR" property="uniqId" />
+    <result column="business_scene" jdbcType="VARCHAR" property="businessScene" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="class_no" jdbcType="BIGINT" property="classNo" />
+    <result column="source" jdbcType="VARCHAR" property="source" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="editor_erp" jdbcType="VARCHAR" property="editorErp" />
+    <result column="editor_name" jdbcType="VARCHAR" property="editorName" />
+    <result column="auditor_erp" jdbcType="VARCHAR" property="auditorErp" />
+    <result column="auditor_name" jdbcType="VARCHAR" property="auditorName" />
+    <result column="release_erp" jdbcType="VARCHAR" property="releaseErp" />
+    <result column="release_name" jdbcType="VARCHAR" property="releaseName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jd.security.llmsec.data.pojo.RedLineKnowledgeWithBLOBs">
+    <result column="question" jdbcType="LONGVARCHAR" property="question" />
+    <result column="answer" jdbcType="LONGVARCHAR" property="answer" />
+    <result column="metadata" jdbcType="LONGVARCHAR" property="metadata" />
+    <result column="desc" jdbcType="LONGVARCHAR" property="desc" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `id`, `uniq_id`, `business_scene`, `class_name`, `class_no`, `source`, `type`, `version`, 
+    `status`, `editor_erp`, `editor_name`, `auditor_erp`, `auditor_name`, `release_erp`, 
+    `release_name`, `create_time`, `update_time`
+  </sql>
+  <sql id="Blob_Column_List">
+    `question`, `answer`, `metadata`, `desc`
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from red_line_knowledge
+    where `id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from red_line_knowledge
+    where `id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample">
+    delete from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into red_line_knowledge (`uniq_id`, `business_scene`, `class_name`, 
+      `class_no`, `source`, `type`, 
+      `version`, `status`, `editor_erp`, 
+      `editor_name`, `auditor_erp`, `auditor_name`, 
+      `release_erp`, `release_name`, `create_time`, 
+      `update_time`, `question`, `answer`, 
+      `metadata`, `desc`)
+    values (#{uniqId,jdbcType=VARCHAR}, #{businessScene,jdbcType=VARCHAR}, #{className,jdbcType=VARCHAR}, 
+      #{classNo,jdbcType=BIGINT}, #{source,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{version,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{editorErp,jdbcType=VARCHAR}, 
+      #{editorName,jdbcType=VARCHAR}, #{auditorErp,jdbcType=VARCHAR}, #{auditorName,jdbcType=VARCHAR}, 
+      #{releaseErp,jdbcType=VARCHAR}, #{releaseName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{question,jdbcType=LONGVARCHAR}, #{answer,jdbcType=LONGVARCHAR}, 
+      #{metadata,jdbcType=LONGVARCHAR}, #{desc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeWithBLOBs">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into red_line_knowledge
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uniqId != null">
+        `uniq_id`,
+      </if>
+      <if test="businessScene != null">
+        `business_scene`,
+      </if>
+      <if test="className != null">
+        `class_name`,
+      </if>
+      <if test="classNo != null">
+        `class_no`,
+      </if>
+      <if test="source != null">
+        `source`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="version != null">
+        `version`,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="editorErp != null">
+        `editor_erp`,
+      </if>
+      <if test="editorName != null">
+        `editor_name`,
+      </if>
+      <if test="auditorErp != null">
+        `auditor_erp`,
+      </if>
+      <if test="auditorName != null">
+        `auditor_name`,
+      </if>
+      <if test="releaseErp != null">
+        `release_erp`,
+      </if>
+      <if test="releaseName != null">
+        `release_name`,
+      </if>
+      <if test="createTime != null">
+        `create_time`,
+      </if>
+      <if test="updateTime != null">
+        `update_time`,
+      </if>
+      <if test="question != null">
+        `question`,
+      </if>
+      <if test="answer != null">
+        `answer`,
+      </if>
+      <if test="metadata != null">
+        `metadata`,
+      </if>
+      <if test="desc != null">
+        `desc`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uniqId != null">
+        #{uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScene != null">
+        #{businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classNo != null">
+        #{classNo,jdbcType=BIGINT},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="editorErp != null">
+        #{editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="editorName != null">
+        #{editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorErp != null">
+        #{auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorName != null">
+        #{auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseErp != null">
+        #{releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseName != null">
+        #{releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="question != null">
+        #{question,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="answer != null">
+        #{answer,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="metadata != null">
+        #{metadata,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="desc != null">
+        #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample" resultType="java.lang.Long">
+    select count(*) from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update red_line_knowledge
+    <set>
+      <if test="row.id != null">
+        `id` = #{row.id,jdbcType=BIGINT},
+      </if>
+      <if test="row.uniqId != null">
+        `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="row.businessScene != null">
+        `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="row.className != null">
+        `class_name` = #{row.className,jdbcType=VARCHAR},
+      </if>
+      <if test="row.classNo != null">
+        `class_no` = #{row.classNo,jdbcType=BIGINT},
+      </if>
+      <if test="row.source != null">
+        `source` = #{row.source,jdbcType=VARCHAR},
+      </if>
+      <if test="row.type != null">
+        `type` = #{row.type,jdbcType=VARCHAR},
+      </if>
+      <if test="row.version != null">
+        `version` = #{row.version,jdbcType=INTEGER},
+      </if>
+      <if test="row.status != null">
+        `status` = #{row.status,jdbcType=VARCHAR},
+      </if>
+      <if test="row.editorErp != null">
+        `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.editorName != null">
+        `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.auditorErp != null">
+        `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.auditorName != null">
+        `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.releaseErp != null">
+        `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="row.releaseName != null">
+        `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="row.createTime != null">
+        `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.updateTime != null">
+        `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="row.question != null">
+        `question` = #{row.question,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="row.answer != null">
+        `answer` = #{row.answer,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="row.metadata != null">
+        `metadata` = #{row.metadata,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="row.desc != null">
+        `desc` = #{row.desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update red_line_knowledge
+    set `id` = #{row.id,jdbcType=BIGINT},
+      `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      `class_name` = #{row.className,jdbcType=VARCHAR},
+      `class_no` = #{row.classNo,jdbcType=BIGINT},
+      `source` = #{row.source,jdbcType=VARCHAR},
+      `type` = #{row.type,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
+      `status` = #{row.status,jdbcType=VARCHAR},
+      `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      `question` = #{row.question,jdbcType=LONGVARCHAR},
+      `answer` = #{row.answer,jdbcType=LONGVARCHAR},
+      `metadata` = #{row.metadata,jdbcType=LONGVARCHAR},
+      `desc` = #{row.desc,jdbcType=LONGVARCHAR}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update red_line_knowledge
+    set `id` = #{row.id,jdbcType=BIGINT},
+      `uniq_id` = #{row.uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{row.businessScene,jdbcType=VARCHAR},
+      `class_name` = #{row.className,jdbcType=VARCHAR},
+      `class_no` = #{row.classNo,jdbcType=BIGINT},
+      `source` = #{row.source,jdbcType=VARCHAR},
+      `type` = #{row.type,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
+      `status` = #{row.status,jdbcType=VARCHAR},
+      `editor_erp` = #{row.editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{row.editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{row.auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{row.auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{row.updateTime,jdbcType=TIMESTAMP}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeWithBLOBs">
+    update red_line_knowledge
+    <set>
+      <if test="uniqId != null">
+        `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScene != null">
+        `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      </if>
+      <if test="className != null">
+        `class_name` = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classNo != null">
+        `class_no` = #{classNo,jdbcType=BIGINT},
+      </if>
+      <if test="source != null">
+        `source` = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        `version` = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="editorErp != null">
+        `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="editorName != null">
+        `editor_name` = #{editorName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorErp != null">
+        `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      </if>
+      <if test="auditorName != null">
+        `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseErp != null">
+        `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseName != null">
+        `release_name` = #{releaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="question != null">
+        `question` = #{question,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="answer != null">
+        `answer` = #{answer,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="metadata != null">
+        `metadata` = #{metadata,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="desc != null">
+        `desc` = #{desc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeWithBLOBs">
+    update red_line_knowledge
+    set `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      `class_name` = #{className,jdbcType=VARCHAR},
+      `class_no` = #{classNo,jdbcType=BIGINT},
+      `source` = #{source,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{releaseName,jdbcType=VARCHAR},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      `question` = #{question,jdbcType=LONGVARCHAR},
+      `answer` = #{answer,jdbcType=LONGVARCHAR},
+      `metadata` = #{metadata,jdbcType=LONGVARCHAR},
+      `desc` = #{desc,jdbcType=LONGVARCHAR}
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledge">
+    update red_line_knowledge
+    set `uniq_id` = #{uniqId,jdbcType=VARCHAR},
+      `business_scene` = #{businessScene,jdbcType=VARCHAR},
+      `class_name` = #{className,jdbcType=VARCHAR},
+      `class_no` = #{classNo,jdbcType=BIGINT},
+      `source` = #{source,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `status` = #{status,jdbcType=VARCHAR},
+      `editor_erp` = #{editorErp,jdbcType=VARCHAR},
+      `editor_name` = #{editorName,jdbcType=VARCHAR},
+      `auditor_erp` = #{auditorErp,jdbcType=VARCHAR},
+      `auditor_name` = #{auditorName,jdbcType=VARCHAR},
+      `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{releaseName,jdbcType=VARCHAR},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP}
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.RedLineKnowledgeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from red_line_knowledge
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

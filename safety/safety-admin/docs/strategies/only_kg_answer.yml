@@ -1,0 +1,12 @@
+businessName: only_kg_answer
+group: default
+desc: '仅红线知识代答'
+rootId: start
+confArray:
+  - nodeId: start
+    functionConf:
+      ref: rag_answer
+    routerConf:
+      type: stupid_end
+      name: stupid_end
+    ignoreError: true

@@ -1,0 +1,13 @@
+[
+  {
+    "model_name": "fasttext_demo",
+    "model_path": "/Users/sunyaofei3/work/models/fasttext/fasttext_online/models/input_security20250710.bin",
+    "stopwords_path": "/Users/sunyaofei3/work/models/fasttext/fasttext_online/models/stopwords.txt",
+    "label_size": 3,
+    "label_mapping": {
+      "__label__非恶意": "0正常文本",
+      "__label__恶意": "1恶意",
+      "__label__业务场景": "2业务场景"
+    }
+  }
+]

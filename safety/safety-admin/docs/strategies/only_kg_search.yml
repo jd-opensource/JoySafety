@@ -1,0 +1,12 @@
+businessName: only_kg_search
+group: default
+desc: '仅红线知识检索'
+rootId: start
+confArray:
+  - nodeId: start
+    functionConf:
+      ref: kb_search
+    routerConf:
+      type: stupid_end
+      name: stupid_end
+    ignoreError: true

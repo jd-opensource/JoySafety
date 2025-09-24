@@ -1,0 +1,116 @@
+{
+  "code": 0,
+  "message": "success",
+  "cost": 0,
+  "data": {
+    "id": 114,
+    "businessName": "JDR_ST_001",
+    "group": "default",
+    "desc": "sync",
+    "rootId": "start",
+    "version": 6,
+    "status": "online",
+    "createTime": 1724084734000,
+    "updateTime": 1724056397000,
+    "conf": "[{\"functionConf\":{\"conf\":{},\"name\":\"dummy\",\"timeoutMilliseconds\":5,\"type\":\"dummy\"},\"ignoreError\":true,\"nodeId\":\"start\",\"routerConf\":{\"conf\":{\"scriptRaw\":\"default/default_dummy_router.groovy\",\"script\":\"def from_robot=ctx.curReq[0].fromRobot()\\nif (from_robot) {\\n    return 'from_robot1'\\n} else {\\n    return 'from_user1'\\n}\"},\"name\":\"groovy\",\"type\":\"groovy\"}},{\"functionConf\":{\"conf\":{\"functionConfs\":[{\"ref\":\"keyword\"},{\"ref\":\"redmodel20240802\",\"conf\":{\"ignoreRiskCode\":[2001]}}]},\"name\":\"parallel_from_user1\",\"timeoutMilliseconds\":200,\"type\":\"parallel\"},\"ignoreError\":true,\"nodeId\":\"from_user1\",\"routerConf\":{\"conf\":{\"scriptRaw\":\"default/from_user1_router.groovy\",\"script\":\"import com.jd.security.llmsec.core.check.MixedCheck\\n\\ndef retMap=ctx.curResult.resultMap\\ndef next=\\\"from_user2_bert\\\"\\n\\ndef kw = retMap.keyword\\ndef fast = retMap.redmodel20240802\\n\\nif (kw == null && fast == null) { //1.黑白名单和fasttext都为空，返回正常\\n    ctx.curResult=MixedCheck.noRisk()\\n    return null\\n} else if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2 )){\\n    ctx.curResult = kw\\n    return null\\n} else if (fast != null && !fast.hasRisk()) { //3.fasttext无恶意，直接返回\\n    ctx.curResult = fast\\n    return null\\n} else { //4.其他，走bert\\n    return next\\n}\"},\"name\":\"groovy\",\"type\":\"groovy\"}},{\"functionConf\":{\"conf\":{\"ignoreRiskCode\":[2001]},\"ref\":\"bert_general_20240802\"},\"ignoreError\":true,\"nodeId\":\"from_user2_bert\",\"routerConf\":{\"conf\":{\"scriptRaw\":\"default/from_user2_bert_router.groovy\",\"script\":\"import com.jd.security.llmsec.core.check.RiskCheckType\\nimport com.jd.security.llmsec.core.check.MixedCheck\\ndef bert = ctx.curResult\\ndef single_label_results = ctx.middleResults[RiskCheckType.single_label_pred]\\n\\ndef fast=null\\n//取fast结果\\nif (single_label_results != null) {\\n    for (item in single_label_results) {\\n        if (item.srcName.contains('redmodel20240802')) {\\n            fast = item\\n        }\\n    }\\n}\\n\\nif (bert != null && bert.hasRisk() && fast != null && fast.hasRisk() \\\\\\n && bert.riskCode==fast.riskCode && bert.probability > 0.5 && fast.probability > 0.5) {\\n    ctx.curResult = bert\\n} else if (bert != null && bert.hasRisk() && fast == null && bert.probability > 0.9) {\\n    ctx.curResult = bert\\n} else if (fast != null && fast.hasRisk() && bert == null && fast.probability > 0.99) {\\n    ctx.curResult = fast\\n} else {\\n    ctx.curResult = MixedCheck.noRisk()\\n}\\nreturn null\"},\"name\":\"groovy\",\"type\":\"groovy\"}},{\"functionConf\":{\"conf\":{\"functionConfs\":[{\"ref\":\"keyword\"},{\"ref\":\"data\"}]},\"name\":\"parallel1\",\"timeoutMilliseconds\":200,\"type\":\"parallel\"},\"ignoreError\":true,\"nodeId\":\"from_robot1\",\"routerConf\":{\"conf\":{\"scriptRaw\":\"default/from_robot1_router.groovy\",\"script\":\"import com.jd.security.llmsec.core.check.MixedCheck\\ndef retMap=ctx.curResult.resultMap\\ndef kw = retMap.keyword\\ndef data = retMap.data\\nif (kw == null && data == null) { //1.黑白名单和数据安全为空，返回正常\\n    ctx.curResult = MixedCheck.noRisk()\\n    return null\\n} else if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2) ) { //黑白名单命中，返回黑白名单结果\\n    ctx.curResult = kw\\n    return null\\n} else if (data != null && (data.hasRisk()))  {  //数据安全命中，返回数据安全结果\\n    ctx.curResult = data\\n    return null;\\n} else { //其他\\n    ctx.curResult = MixedCheck.noRisk()\\n    return null\\n}\"},\"name\":\"groovy\",\"type\":\"groovy\"}}]",
+    "confArray": [
+      {
+        "nodeId": "start",
+        "functionConf": {
+          "type": "dummy",
+          "name": "dummy",
+          "timeoutMilliseconds": 5,
+          "conf": {}
+        },
+        "routerConf": {
+          "type": "groovy",
+          "name": "groovy",
+          "conf": {
+            "scriptRaw": "default/default_dummy_router.groovy",
+            "script": "def from_robot=ctx.curReq[0].fromRobot()\nif (from_robot) {\n    return 'from_robot1'\n} else {\n    return 'from_user1'\n}"
+          }
+        },
+        "ignoreError": true
+      },
+      {
+        "nodeId": "from_user1",
+        "functionConf": {
+          "type": "parallel",
+          "name": "parallel_from_user1",
+          "timeoutMilliseconds": 200,
+          "conf": {
+            "functionConfs": [
+              {
+                "ref": "keyword"
+              },
+              {
+                "ref": "redmodel20240802",
+                "conf": {
+                  "ignoreRiskCode": [
+                    2001
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "routerConf": {
+          "type": "groovy",
+          "name": "groovy",
+          "conf": {
+            "scriptRaw": "default/from_user1_router.groovy",
+            "script": "import com.jd.security.llmsec.core.check.MixedCheck\n\ndef retMap=ctx.curResult.resultMap\ndef next=\"from_user2_bert\"\n\ndef kw = retMap.keyword\ndef fast = retMap.redmodel20240802\n\nif (kw == null && fast == null) { //1.黑白名单和fasttext都为空，返回正常\n    ctx.curResult=MixedCheck.noRisk()\n    return null\n} else if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2 )){\n    ctx.curResult = kw\n    return null\n} else if (fast != null && !fast.hasRisk()) { //3.fasttext无恶意，直接返回\n    ctx.curResult = fast\n    return null\n} else { //4.其他，走bert\n    return next\n}"
+          }
+        },
+        "ignoreError": true
+      },
+      {
+        "nodeId": "from_user2_bert",
+        "functionConf": {
+          "ref": "bert_general_20240802",
+          "conf": {
+            "ignoreRiskCode": [
+              2001
+            ]
+          }
+        },
+        "routerConf": {
+          "type": "groovy",
+          "name": "groovy",
+          "conf": {
+            "scriptRaw": "default/from_user2_bert_router.groovy",
+            "script": "import com.jd.security.llmsec.core.check.RiskCheckType\nimport com.jd.security.llmsec.core.check.MixedCheck\ndef bert = ctx.curResult\ndef single_label_results = ctx.middleResults[RiskCheckType.single_label_pred]\n\ndef fast=null\n//取fast结果\nif (single_label_results != null) {\n    for (item in single_label_results) {\n        if (item.srcName.contains('redmodel20240802')) {\n            fast = item\n        }\n    }\n}\n\nif (bert != null && bert.hasRisk() && fast != null && fast.hasRisk() \\\n && bert.riskCode==fast.riskCode && bert.probability > 0.5 && fast.probability > 0.5) {\n    ctx.curResult = bert\n} else if (bert != null && bert.hasRisk() && fast == null && bert.probability > 0.9) {\n    ctx.curResult = bert\n} else if (fast != null && fast.hasRisk() && bert == null && fast.probability > 0.99) {\n    ctx.curResult = fast\n} else {\n    ctx.curResult = MixedCheck.noRisk()\n}\nreturn null"
+          }
+        },
+        "ignoreError": true
+      },
+      {
+        "nodeId": "from_robot1",
+        "functionConf": {
+          "type": "parallel",
+          "name": "parallel1",
+          "timeoutMilliseconds": 200,
+          "conf": {
+            "functionConfs": [
+              {
+                "ref": "keyword"
+              },
+              {
+                "ref": "data"
+              }
+            ]
+          }
+        },
+        "routerConf": {
+          "type": "groovy",
+          "name": "groovy",
+          "conf": {
+            "scriptRaw": "default/from_robot1_router.groovy",
+            "script": "import com.jd.security.llmsec.core.check.MixedCheck\ndef retMap=ctx.curResult.resultMap\ndef kw = retMap.keyword\ndef data = retMap.data\nif (kw == null && data == null) { //1.黑白名单和数据安全为空，返回正常\n    ctx.curResult = MixedCheck.noRisk()\n    return null\n} else if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2) ) { //黑白名单命中，返回黑白名单结果\n    ctx.curResult = kw\n    return null\n} else if (data != null && (data.hasRisk()))  {  //数据安全命中，返回数据安全结果\n    ctx.curResult = data\n    return null;\n} else { //其他\n    ctx.curResult = MixedCheck.noRisk()\n    return null\n}"
+          }
+        },
+        "ignoreError": true
+      }
+    ]
+  }
+}

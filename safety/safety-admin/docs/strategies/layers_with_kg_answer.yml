@@ -1,0 +1,128 @@
+businessName: test
+group: default
+desc: 带红线代答的纵深防御策略
+rootId: start
+confArray:
+  - nodeId: start
+    functionConf:
+      type: dummy
+      name: dummy
+      timeoutMilliseconds: 5
+      conf: {}
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          def from_robot=ctx.curReq[0].fromRobot()
+          if (from_robot) {
+              return 'from_robot1'
+          } else {
+              return 'from_user1'
+          }
+    ignoreError: true
+  - nodeId: from_user1
+    functionConf:
+      type: parallel
+      name: parallel_from_user1
+      timeoutMilliseconds: 200
+      conf:
+        functionConfs:
+          - ref: keyword
+          - ref: fast20250710
+            conf:
+              ignoreRiskCode:
+                - 2001
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          import com.jd.security.llmsec.core.check.MixedCheck
+          
+          def retMap=ctx.curResult.resultMap
+          def next="from_user2_bert"
+          
+          def kw = retMap.keyword
+          def fast = retMap.fast20250710
+          
+          if (kw == null && fast == null) { // 黑白名单和fasttext都为空，返回正常
+              ctx.curResult=MixedCheck.noRisk()
+              return null
+          } else if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2 )){ // 命中黑/白，直接返回
+              ctx.curResult = kw
+              return null
+          } else if (kw != null && kw.bwgLabel == 3)  { // 命中灰，走后面
+              return next
+          } else if (fast != null && !fast.hasRisk()) { // fasttext无恶意，直接返回
+              ctx.curResult = fast
+              return null
+          } else if (fast == null) { // fasttext失败，直接返回，避免因fasttext异常导致的雪崩
+              ctx.curResult=MixedCheck.noRisk()
+              return null
+          } else { // 走bert
+              return next
+          }
+    ignoreError: true
+  - nodeId: from_user2_bert
+    functionConf:
+      type: parallel
+      name: parallel_from_user2
+      timeoutMilliseconds: 200
+      conf:
+        functionConfs:
+          - ref: rag_answer
+            conf:
+              threshold: 0.8
+          - ref: bert_20250916
+            conf:
+              ignoreRiskCode:
+                - 2001
+    routerConf:
+      type: groovy
+      name: groovy
+      conf:
+        script: |-
+          import com.jd.security.llmsec.core.check.RiskCheckType
+          import com.jd.security.llmsec.core.check.MixedCheck
+          
+          def rag_answers = ctx.middleResults[RiskCheckType.rag_answer]
+          if (rag_answers != null && rag_answers[0].riskCode > 0) {
+            rag_answer = rag_answers[0]
+            ctx.curResult = rag_answer
+            return null
+          }
+          
+          def bert = null
+          def fast=null
+          def single_label_results = ctx.middleResults[RiskCheckType.single_label_pred]
+          
+          //取fast结果
+          if (single_label_results != null) {
+              for (item in single_label_results) {
+                  if (item.srcName.contains("fast20250710")) {
+                      fast = item
+                  }
+                  if (item.srcName.contains("bert_20250916")) {
+                      bert = item
+                  }
+              }
+          }
+          
+          if (bert != null && bert.hasRisk() && fast != null && fast.hasRisk() \
+           && bert.riskCode==fast.riskCode && bert.probability > 0.5 && fast.probability > 0.5) {
+              ctx.curResult = bert
+          } else if (fast != null && fast.hasRisk() && bert == null && fast.probability > 0.99) {
+              ctx.curResult = fast
+          } else {
+              ctx.curResult = MixedCheck.noRisk()
+          }
+          return null
+    ignoreError: true
+  - nodeId: from_robot1
+    functionConf:
+      ref: keyword
+    routerConf:
+      type: keyword
+      name: keyword_end
+    ignoreError: true

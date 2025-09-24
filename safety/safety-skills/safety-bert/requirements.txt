@@ -1,0 +1,6 @@
+pydantic
+concurrent-log-handler
+tornado
+numpy
+torch
+transformers

@@ -1,0 +1,1 @@
+docker build --progress=plain -t safety-knowledge:0.0.1 ..
