@@ -4,7 +4,7 @@ skills = [
         "group": "default",
         "desc": "fast20250710",
         "type": "single_label_pred",
-        "timeoutMilliseconds": 100,
+        "timeoutMilliseconds": 1000,
         "status": "online",
         "confObj": {
             "extra": {
@@ -20,7 +20,7 @@ skills = [
         "group": "default",
         "desc": "敏感词识别",
         "type": "keyword",
-        "timeoutMilliseconds": 100,
+        "timeoutMilliseconds": 1000,
         "status": "online",
         "confObj": {
             "name": "敏感词服务",
@@ -32,7 +32,7 @@ skills = [
         "group": "default",
         "desc": "bert_prompt_injection_20250828",
         "type": "single_label_pred",
-        "timeoutMilliseconds": 300,
+        "timeoutMilliseconds": 2000,
         "status": "online",
         "confObj": {
             "extra": {
@@ -48,7 +48,7 @@ skills = [
         "group": "default",
         "desc": "bert_20250916",
         "type": "single_label_pred",
-        "timeoutMilliseconds": 300,
+        "timeoutMilliseconds": 2000,
         "status": "online",
         "confObj": {
             "extra": {
@@ -64,7 +64,7 @@ skills = [
         "group": "default",
         "desc": "红线知识检索",
         "type": "kb_search",
-        "timeoutMilliseconds": 300,
+        "timeoutMilliseconds": 2000,
         "status": "online",
         "confObj": {
             "topK": 5,
@@ -78,7 +78,7 @@ skills = [
         "group": "default",
         "desc": "红线代答",
         "type": "rag_answer",
-        "timeoutMilliseconds": 3000,
+        "timeoutMilliseconds": 5000,
         "confObj": {
             "topK": 5,
             "threshold": 0.8,
