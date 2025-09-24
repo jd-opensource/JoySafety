@@ -52,9 +52,9 @@ services:
     image: vearch/vearch:3.5.6
     #restart: always
     command: ["all"]
-    ports:
-      - 8817:8817
-      - 9001:9001
+#    ports:
+#      - 8817:8817
+#      - 9001:9001
     volumes:
       - ./deploy/thirdparty/vearch/config.toml:/vearch/config.toml
     networks:
@@ -134,8 +134,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       KEYWORD_APP_CONF_FILE: /work/conf/application_example.properties
       KEYWORD_LOG_CONF_FILE: /work/conf/log4j2-example.xml
-    ports:
-      - 8005:8005
+#    ports:
+#      - 8005:8005
     volumes:
       - ./example/safety-skills/safety-keywords/conf:/work/conf
       - ./example/safety-skills/safety-keywords/logs:/work/logs
@@ -155,8 +155,8 @@ services:
     #restart: always
     environment:
       BERT_CONFIG_FILE: /work/conf/conf_example.json
-    ports:
-      - 8003:8003
+#    ports:
+#      - 8003:8003
     volumes:
       - ${SAFETY_MODEL_DIR}:/work/models
       - ./example/safety-skills/safety-bert/conf:/work/conf
@@ -175,8 +175,8 @@ services:
     environment:
       FASTTEXT_GUNICORN_CONF: /work/conf/gunicorn.conf.py
       FASTTEXT_CONFIG: /work/conf/conf_example.json
-    ports:
-      - 8002:8002
+#    ports:
+#      - 8002:8002
     volumes:
       - ${SAFETY_MODEL_DIR}:/work/models
       - ./example/safety-skills/safety-fasttext/conf:/work/conf
@@ -199,8 +199,8 @@ services:
         condition: service_started
     environment:
       KG_CONFIG_FILE: /work/conf/config_example.py
-    ports:
-      - 8004:8004
+#    ports:
+#      - 8004:8004
     volumes:
       - ${SAFETY_MODEL_DIR}:/work/models
       - ./example/safety-skills/safety-knowledge/conf:/work/conf
