@@ -25,7 +25,7 @@ confArray:
     functionConf:
       type: parallel
       name: parallel_from_user_test1
-      timeoutMilliseconds: 500
+      timeoutMilliseconds: 1000
       conf:
         functionConfs:
           - ref: keyword
@@ -67,7 +67,7 @@ confArray:
     functionConf:
       type: parallel
       name: parallel_from_user_test_bert2
-      timeoutMilliseconds: 1000
+      timeoutMilliseconds: 2000
       conf:
         functionConfs:
           - ref: bert_20250916
