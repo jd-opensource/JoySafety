@@ -19,7 +19,7 @@ INSERT INTO `sensitive_words` VALUES
   (2,'a3575f6dbbee56186d2fb6a0ab1a6c1f','all','小箩筣av',NULL,NULL,NULL,'contain','black','示例','涉黄','1','online',NULL,NULL,NULL,NULL,NULL,NULL,'2024-01-16 00:00:00','2024-01-16 00:00:00','涉黄',1002,'色情传播',3),
   (3,'698933c08dbc76bb7e3243446a9ac522','all','成人a在线',NULL,NULL,NULL,'contain','black','示例','涉黄','1','online',NULL,NULL,NULL,NULL,NULL,NULL,'2024-02-23 00:00:00','2024-02-23 00:00:00','涉黄',1002,'色情传播',3),
   (4,'b16304026c84a83a5bb33390741ae418','all','我艹',NULL,NULL,NULL,'contain','black','示例','辱骂','1','online',NULL,NULL,NULL,NULL,NULL,NULL,'2024-01-16 00:00:00','2024-01-16 00:00:00','辱骂',1006,'辱骂',1)
-;
+ ;
 /*!40000 ALTER TABLE `sensitive_words` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
