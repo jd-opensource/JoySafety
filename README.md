@@ -89,6 +89,7 @@
   
   #2. 进入项目路径
   cd JoySafety
+  
   #3. 设置环境变量（建议复制执行，后续脚本/服务均可自动识别）
   export SAFETY_ROOT_PATH=`pwd`
   export SAFETY_MODEL_DIR=${SAFETY_ROOT_PATH}/data/models
