@@ -22,6 +22,7 @@ jobs:
           compose-file: "./deploy/docker-compose.yml"
         env:
           SAFETY_ROOT_PATH: "$pwd"
+          SAFETY_MODEL_DIR: ${SAFETY_ROOT_PATH}/data/models
           REDIS_PASSWORD: 123456
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_PASSWORD: 123456
