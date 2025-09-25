@@ -92,14 +92,15 @@
   
   #3. 设置环境变量（建议复制执行，后续脚本/服务均可自动识别）
   export SAFETY_ROOT_PATH=`pwd`
-  export SAFETY_MODEL_DIR=${SAFETY_ROOT_PATH}/data/models
-
+  #正常为JoySafety 根路径
+  echo ${SAFETY_ROOT_PATH}
 ```
 
 =======
 ### 1. 下载模型文件（Huggingface）
 - 推荐使用 [git-lfs](https://git-lfs.com) 拉取大模型文件
 ```shell
+
   #进入项目路径
   cd $SAFETY_ROOT_PATH
 
@@ -116,15 +117,15 @@
 - **注意：模型文件路径需与 .env 配置一致，建议统一为 `~/data/models`**
 
 ### 2. 配置 .env 文件
-- 【在项目根路径】 **复制** `.env.example` 或手动创建 `.env`，并填写以下内容（路径需与模型实际下载路径一致）：
+- 【在项目根路径】 **复制** `.env.example` 或手动创建 `.env`：
 ```shell
+   # 注：切换Shell窗口, 重新设置SAFETY_ROOT_PATH
    cd $SAFETY_ROOT_PATH
    
    cp -f .env.example .env
-
-   #！！！ SAFETY_MODEL_DIR 修改 模型绝对路径
-   #SAFETY_MODEL_DIR=${SAFETY_ROOT_PATH}/data/models
-
+    
+   # 测试只需修改.evn文件中变量:SAFETY_MODEL_DIR，路径需与模型实际下载路径一致【绝对路径】
+   SAFETY_MODEL_DIR=
 ```
 
 ### 3. 一键启动（Docker Compose）
