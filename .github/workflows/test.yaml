@@ -19,7 +19,7 @@ jobs:
       - name: Run docker compose
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
-          compose-file: "./docker-compose.yml"
+          compose-file: "./docker-compose.yaml"
         env:
           SAFETY_ROOT_PATH: "$pwd"
           SAFETY_MODEL_DIR: ${SAFETY_ROOT_PATH}/data/models
