@@ -124,7 +124,7 @@
    
    cp -f .env.example .env
     
-   # 测试只需修改.evn文件中变量:SAFETY_MODEL_DIR，路径需与模型实际下载路径一致【绝对路径】
+   # 测试只需修改.env文件中变量:SAFETY_MODEL_DIR，路径需与模型实际下载路径一致【绝对路径】
    SAFETY_MODEL_DIR=
 ```
 
@@ -315,7 +315,7 @@ flowchart TD
 ## <a id="计划"></a>📅计划
 **JoySafety**旨在构建完整大模型安全解决方案，此次开源主要为大模型安全防护能力，后续将陆续推出：
 
-**大模型审计模块** 在Huggingface平台开源部分[安全审核大模型](https://huggingface.co/jd-opensource/JSL-joysafety-v1)，后续Joysafety集成此系列模型实现大模型风险合规的审计能力
+**安全审核大模型** 在Huggingface平台开源部分[安全审核大模型](https://huggingface.co/jd-opensource/JSL-joysafety-v1)，后续Joysafety集成此系列模型实现大模型风险合规的审计能力
 
 **大模型安全评测**：针对大模型应用上线前的安全风险检测，覆盖《生成式人工智能服务安全基本要求》中5大类31小类风险类型。
 
