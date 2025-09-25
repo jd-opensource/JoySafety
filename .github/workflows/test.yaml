@@ -7,10 +7,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.2.2
+      
+      - name: Set up environment variables
+        run: |
+          echo "SAFETY_ROOT_PATH=$PWD" >> $GITHUB_ENV
+          echo "SAFETY_MODEL_DIR=$PWD/data/models" >> $GITHUB_ENV
 
       - name: prepare the models
-        env:
-          SAFETY_ROOT_PATH: "$pwd"
         run: |
           git lfs install
           git clone https://huggingface.co/jdopensource/JoySafety ${SAFETY_ROOT_PATH}/data/models
@@ -21,13 +24,14 @@ jobs:
         with:
           compose-file: "./docker-compose.yaml"
         env:
-          SAFETY_ROOT_PATH: "$pwd"
-          SAFETY_MODEL_DIR: "$pwd/data/models"
+          SAFETY_ROOT_PATH:  ${{ env.SAFETY_ROOT_PATH }}
+          SAFETY_MODEL_DIR:  ${{ env.SAFETY_MODEL_DIR }}
           REDIS_PASSWORD: 123456
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_PASSWORD: 123456
 
       - name: Execute tests in the running services
         run: |
+          sleep 100s
           docker cp quickstart/api_test.py safety-knowledge:/work/api_test.py
           docker exec -it safety-knowledge python /work/api_test.py '你好'
