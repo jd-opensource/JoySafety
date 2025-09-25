@@ -9,8 +9,9 @@ jobs:
       - uses: actions/checkout@v4.2.2
 
       - name: prepare the models
+        env:
+          SAFETY_ROOT_PATH: "$pwd"
         run: |
-          SAFETY_ROOT_PATH=`pwd`
           git lfs install
           git clone https://huggingface.co/jdopensource/JoySafety ${SAFETY_ROOT_PATH}/data/models
           cd $SAFETY_ROOT_PATH        
