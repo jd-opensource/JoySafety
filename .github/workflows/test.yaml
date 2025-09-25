@@ -2,7 +2,7 @@ name: Test
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-build:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,11 +20,10 @@ build:
         with:
           compose-file: "./deploy/docker-compose.yml"
         env:
-          SAFETY_ROOT_PATH: `pwd`
-          SAFETY_MODEL_DIR=
-          REDIS_PASSWORD=123456
-          MYSQL_ROOT_PASSWORD=123456
-          MYSQL_PASSWORD=123456
+          SAFETY_ROOT_PATH: "$pwd"
+          REDIS_PASSWORD: 123456
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_PASSWORD: 123456
 
       - name: Execute tests in the running services
         run: |
