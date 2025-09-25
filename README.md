@@ -12,6 +12,7 @@
 - [🛠️ 开发](#开发)
 - [📄 许可证](#许可证)
 - [📅 计划](#计划)
+- Star History
 
 ---
 
@@ -324,3 +325,7 @@ flowchart TD
 欢迎加入JoySafety官方微信交流群：
 
 ![官方微信交流群](docs/wechat.png)
+
+## **Star History**
+
+[![Star History Chart](https://api.star-history.com/svg?repos=jd-opensource/JoySafety&type=Date)](https://www.star-history.com/#jd-opensource/JoySafety&Date)
