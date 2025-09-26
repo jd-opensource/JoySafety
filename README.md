@@ -115,7 +115,6 @@
   #因网络问题，您也可以从[ModelScope](https://modelscope.cn/models/syf20240814/joysafety/files)下载，`记得解压fast20250710目录下的zip文件`）
   
 ```
-- **注意：模型文件路径需与 .env 配置一致，建议统一为 `~/data/models`**
 
 ### 2. 配置 .env 文件
 - 【在项目根路径】 **复制** `.env.example` 或手动创建 `.env`：
