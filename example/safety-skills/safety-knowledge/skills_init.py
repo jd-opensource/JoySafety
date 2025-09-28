@@ -1,21 +1,5 @@
 skills = [
     {
-        "name": "fast20250710",
-        "group": "default",
-        "desc": "fast20250710",
-        "type": "single_label_pred",
-        "timeoutMilliseconds": 1000,
-        "status": "online",
-        "confObj": {
-            "extra": {
-                "url": "http://safety-fasttext:8002/fasttext/fast20250710"
-            },
-            "name": "fast20250710",
-            "modelType": "fasttext",
-            "ignoreRiskCode": []
-        }
-    },
-    {
         "name": "keyword",
         "group": "default",
         "desc": "敏感词识别",

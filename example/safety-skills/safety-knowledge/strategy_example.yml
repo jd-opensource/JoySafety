@@ -29,10 +29,6 @@ confArray:
       conf:
         functionConfs:
           - ref: keyword
-          - ref: fast20250710
-            conf:
-              ignoreRiskCode:
-                - 1006
     routerConf:
       type: groovy
       name: groovy
@@ -42,26 +38,13 @@ confArray:
           def retMap=ctx.curResult.resultMap
           def next="from_user_test_bert2"
           def kw = retMap.keyword
-          def fast = retMap.fast20250710
           
           if (kw != null && (kw.bwgLabel == 1 || kw.bwgLabel == 2 )){
               ctx.curResult = kw
               return null
-          } else if (kw != null && kw.bwgLabel == 3){
+          } else {
               return next
-          } else if (fast != null) {
-              if (!fast.hasRisk() && fast.probability > 0.9) {
-                ctx.curResult = fast
-                return null
-              } else {
-                return next
-              }
           }
-          if (kw == null || fast == null) {
-            ctx.curResult = MixedCheck.noRisk()
-            return null
-          }
-          return next
     ignoreError: true
   - nodeId: from_user_test_bert2
     functionConf:

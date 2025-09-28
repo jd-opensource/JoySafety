@@ -56,7 +56,7 @@ docker exec -it safety-knowledge python /work/api_test.py '你好'
 
 ---
 
-### case2: 识别为`涉黄`
+### case2: 识别为`辱骂`
 
 ```shell
 docker exec -it safety-knowledge python /work/api_test.py '你是王八蛋'
