@@ -98,7 +98,8 @@
 ```
 
 =======
-### 1. 下载模型文件（Huggingface）
+### 1. 下载模型文件（Huggingface)
+- [模型介绍](safety/safety-skills/model_overview.md)
 - 推荐使用 [git-lfs](https://git-lfs.com) 拉取大模型文件
 ```shell
 
