@@ -1,0 +1,15 @@
+blinker==1.9.0
+click==8.3.0
+concurrent-log-handler==0.9.28
+fasttext==0.9.3
+Flask==3.1.2
+gunicorn==23.0.0
+itsdangerous==2.2.0
+jieba==0.42.1
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+numpy==1.26.4
+packaging==25.0
+portalocker==3.2.0
+pybind11==3.0.1
+Werkzeug==3.1.3

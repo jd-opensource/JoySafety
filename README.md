@@ -142,19 +142,46 @@
 ---
 
 ## 📖 <a id="使用指南"></a>使用指南
+### 如何接入一个业务
+> 该项目可以同时支持多个业务，每个业务都可以动态增加，分钟级生效。
+0. 注册原子能力（如果需要用的原子能力未注册过），可参考原子能力管理参考： [function_api.md](safety/safety-admin/docs/api/function_api.md)
+1. 增加一个业务（参考[business_api.md](safety/safety-admin/docs/api/business_api.md)）
+2. 为业务增加策略（参考：[dag_api.md](safety/safety-admin/docs/api/dag_api.md)、[策略样例](safety/safety-admin/docs/strategies)）
+
+*一个完整的代码实例：*[example.py](docs/example.py)
+
+### 如何配置策略（DAG）
+识别策略整体是DAG，从rootId对应的node开始，逐层执行识别策略；策略的每个node分为两部分，function和router；function为当前结点执行的具体能力，router为基于当前结点的识别结果决定需要执行的下一个结点。
+
+function类别包含single_label_pred（支持现成的两种开箱即用的实现）、keyword、kb_search、rag_answer、multi_turn_detect，配置方式和含义见上节[如何接入一个业务](#如何接入一个业务)中的完整实例，另外，还支持一个虚拟的类别parallel，以支持在单个node内多个function并行执行。
+
+常用的router类别包括stupid_end和groovy，前者表示直接结束，后续是groovy脚本基于识别结果来返回一下步的node_id。groovy脚本中的内置变量是`ctx`,其结构见对象[SessionContext.java](safety/safety-basic/src/main/java/com/jd/security/llmsec/core/session/SessionContext.java)。
+
+比较典型的策略编排示例见：[README.md](safety/safety-admin/docs/strategies/README.md)
+
+
+### 如何管理敏感词
+支持按`分组+业务`来管理敏感词，另外`all`业务下的敏感词对所有业务生效。
+
+对敏感词的管理方式可以参考：[sensitive_words_api.md](safety/safety-admin/docs/api/sensitive_words_api.md)
+
+### 如何管理知识库
+本项目对知识的管理是分两层的；第一层: 使用mysql数据库用于数据持久化以；第二层：使用safety_knowledge+vearch实现知识的向量化及语义检索。
+
+知识在数据库的管理方式可以参考：[knowledge_api.md](safety/safety-admin/docs/api/knowledge_api.md)；知识向量化及存储至vearch可以参考：[index_all.py]（example/safety-skills/safety-knowledge/index_all.py）
+
+
+
 
 ### API 接口调用
+
 参考 [API 文档](./safety/safety-api/docs/api.md)
 
-### 多语言调用
+**多语言调用：**
 - Python: [python/demo.py](safety/safety-demo/python/demo.py)
 - Go: [golang/main.go](safety/safety-demo/golang/main.go)
 - Java: [java demo](safety/safety-demo/java/src/main/java/com/jd/security/llmsec/demo/DefenseApiDemo.java)
 
-### 动态配置
-- 业务管理参考： [business_api.md](safety/safety-admin/docs/api/business_api.md)
-- 原子能力管理参考： [function_api.md](safety/safety-admin/docs/api/function_api.md)
-- 策略编排参考：[dag_api.md](safety/safety-admin/docs/api/dag_api.md)、[策略样例](safety/safety-admin/docs/strategies)
 
 ### FAQ
 常见问题与解决方案见 [FAQ](./docs/FAQ.md)
