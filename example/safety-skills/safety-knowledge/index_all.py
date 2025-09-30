@@ -1,7 +1,6 @@
 import json
 import requests
 
-ADMIN_HOST = "http://safety-admin:8006"
 KNOWLEDGE_HOST = "http://safety-knowledge:8004"
 
 import hashlib
