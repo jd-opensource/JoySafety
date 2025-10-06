@@ -113,7 +113,7 @@
   git clone https://huggingface.co/jdopensource/JoySafety ${SAFETY_ROOT_PATH}/data/models
 
   #方案2
-  #因网络问题，您也可以从[ModelScope](https://modelscope.cn/models/syf20240814/joysafety/files)下载，`记得解压fast20250710目录下的zip文件`）
+  #因网络问题，您也可以从[ModelScope](https://modelscope.cn/models/syf20240814/joysafety/files)下载）
   
 ```
 
