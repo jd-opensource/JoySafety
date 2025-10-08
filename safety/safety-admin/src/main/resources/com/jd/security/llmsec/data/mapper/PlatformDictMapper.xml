@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jd.security.llmsec.data.mapper.PlatformUserInfoMapper">
-  <resultMap id="BaseResultMap" type="com.jd.security.llmsec.data.pojo.PlatformUserInfo">
+<mapper namespace="com.jd.security.llmsec.data.mapper.PlatformDictMapper">
+  <resultMap id="BaseResultMap" type="com.jd.security.llmsec.data.pojo.PlatformDict">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="erp" jdbcType="VARCHAR" property="erp" />
-    <result column="business_token" jdbcType="VARCHAR" property="businessToken" />
-    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="version" jdbcType="INTEGER" property="version" />
     <result column="desc" jdbcType="VARCHAR" property="desc" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="release_erp" jdbcType="VARCHAR" property="releaseErp" />
     <result column="release_name" jdbcType="VARCHAR" property="releaseName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jd.security.llmsec.data.pojo.PlatformDict">
+    <result column="value" jdbcType="LONGVARCHAR" property="value" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,16 +74,21 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    `id`, `name`, `erp`, `business_token`, `role`, `desc`, `status`, `release_erp`, `release_name`, 
-    `create_time`, `update_time`
+    `id`, `key`, `version`, `desc`, `status`, `release_erp`, `release_name`, `create_time`, 
+    `update_time`
   </sql>
-  <select id="selectByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfoExample" resultMap="BaseResultMap">
+  <sql id="Blob_Column_List">
+    `value`
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from platform_user_info
+    ,
+    <include refid="Blob_Column_List" />
+    from platform_dict
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,52 +96,62 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from platform_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
-    from platform_user_info
+    ,
+    <include refid="Blob_Column_List" />
+    from platform_dict
     where `id` = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from platform_user_info
+    delete from platform_dict
     where `id` = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfoExample">
-    delete from platform_user_info
+  <delete id="deleteByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample">
+    delete from platform_dict
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfo">
+  <insert id="insert" parameterType="com.jd.security.llmsec.data.pojo.PlatformDict">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into platform_user_info (`name`, `erp`, `business_token`, 
-      `role`, `desc`, `status`, 
-      `release_erp`, `release_name`, `create_time`, 
-      `update_time`)
-    values (#{name,jdbcType=VARCHAR}, #{erp,jdbcType=VARCHAR}, #{businessToken,jdbcType=VARCHAR}, 
-      #{role,jdbcType=VARCHAR}, #{desc,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{releaseErp,jdbcType=VARCHAR}, #{releaseName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+    insert into platform_dict (`key`, `version`, `desc`, 
+      `status`, `release_erp`, `release_name`, 
+      `create_time`, `update_time`, `value`
+      )
+    values (#{key,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{desc,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{releaseErp,jdbcType=VARCHAR}, #{releaseName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{value,jdbcType=LONGVARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfo">
+  <insert id="insertSelective" parameterType="com.jd.security.llmsec.data.pojo.PlatformDict">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into platform_user_info
+    insert into platform_dict
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        `name`,
+      <if test="key != null">
+        `key`,
       </if>
-      <if test="erp != null">
-        `erp`,
-      </if>
-      <if test="businessToken != null">
-        `business_token`,
-      </if>
-      <if test="role != null">
-        `role`,
+      <if test="version != null">
+        `version`,
       </if>
       <if test="desc != null">
         `desc`,
@@ -155,19 +171,16 @@
       <if test="updateTime != null">
         `update_time`,
       </if>
+      <if test="value != null">
+        `value`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
       </if>
-      <if test="erp != null">
-        #{erp,jdbcType=VARCHAR},
-      </if>
-      <if test="businessToken != null">
-        #{businessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="role != null">
-        #{role,jdbcType=VARCHAR},
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
       </if>
       <if test="desc != null">
         #{desc,jdbcType=VARCHAR},
@@ -187,31 +200,28 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="value != null">
+        #{value,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfoExample" resultType="java.lang.Long">
-    select count(*) from platform_user_info
+  <select id="countByExample" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample" resultType="java.lang.Long">
+    select count(*) from platform_dict
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update platform_user_info
+    update platform_dict
     <set>
       <if test="row.id != null">
         `id` = #{row.id,jdbcType=BIGINT},
       </if>
-      <if test="row.name != null">
-        `name` = #{row.name,jdbcType=VARCHAR},
+      <if test="row.key != null">
+        `key` = #{row.key,jdbcType=VARCHAR},
       </if>
-      <if test="row.erp != null">
-        `erp` = #{row.erp,jdbcType=VARCHAR},
-      </if>
-      <if test="row.businessToken != null">
-        `business_token` = #{row.businessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="row.role != null">
-        `role` = #{row.role,jdbcType=VARCHAR},
+      <if test="row.version != null">
+        `version` = #{row.version,jdbcType=INTEGER},
       </if>
       <if test="row.desc != null">
         `desc` = #{row.desc,jdbcType=VARCHAR},
@@ -231,18 +241,35 @@
       <if test="row.updateTime != null">
         `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="row.value != null">
+        `value` = #{row.value,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="example != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
-    update platform_user_info
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update platform_dict
     set `id` = #{row.id,jdbcType=BIGINT},
-      `name` = #{row.name,jdbcType=VARCHAR},
-      `erp` = #{row.erp,jdbcType=VARCHAR},
-      `business_token` = #{row.businessToken,jdbcType=VARCHAR},
-      `role` = #{row.role,jdbcType=VARCHAR},
+      `key` = #{row.key,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
+      `desc` = #{row.desc,jdbcType=VARCHAR},
+      `status` = #{row.status,jdbcType=VARCHAR},
+      `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{row.releaseName,jdbcType=VARCHAR},
+      `create_time` = #{row.createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{row.updateTime,jdbcType=TIMESTAMP},
+      `value` = #{row.value,jdbcType=LONGVARCHAR}
+    <if test="example != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update platform_dict
+    set `id` = #{row.id,jdbcType=BIGINT},
+      `key` = #{row.key,jdbcType=VARCHAR},
+      `version` = #{row.version,jdbcType=INTEGER},
       `desc` = #{row.desc,jdbcType=VARCHAR},
       `status` = #{row.status,jdbcType=VARCHAR},
       `release_erp` = #{row.releaseErp,jdbcType=VARCHAR},
@@ -253,20 +280,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfo">
-    update platform_user_info
+  <update id="updateByPrimaryKeySelective" parameterType="com.jd.security.llmsec.data.pojo.PlatformDict">
+    update platform_dict
     <set>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
+      <if test="key != null">
+        `key` = #{key,jdbcType=VARCHAR},
       </if>
-      <if test="erp != null">
-        `erp` = #{erp,jdbcType=VARCHAR},
-      </if>
-      <if test="businessToken != null">
-        `business_token` = #{businessToken,jdbcType=VARCHAR},
-      </if>
-      <if test="role != null">
-        `role` = #{role,jdbcType=VARCHAR},
+      <if test="version != null">
+        `version` = #{version,jdbcType=INTEGER},
       </if>
       <if test="desc != null">
         `desc` = #{desc,jdbcType=VARCHAR},
@@ -286,15 +307,29 @@
       <if test="updateTime != null">
         `update_time` = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="value != null">
+        `value` = #{value,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfo">
-    update platform_user_info
-    set `name` = #{name,jdbcType=VARCHAR},
-      `erp` = #{erp,jdbcType=VARCHAR},
-      `business_token` = #{businessToken,jdbcType=VARCHAR},
-      `role` = #{role,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jd.security.llmsec.data.pojo.PlatformDict">
+    update platform_dict
+    set `key` = #{key,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `desc` = #{desc,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=VARCHAR},
+      `release_erp` = #{releaseErp,jdbcType=VARCHAR},
+      `release_name` = #{releaseName,jdbcType=VARCHAR},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      `update_time` = #{updateTime,jdbcType=TIMESTAMP},
+      `value` = #{value,jdbcType=LONGVARCHAR}
+    where `id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jd.security.llmsec.data.pojo.PlatformDict">
+    update platform_dict
+    set `key` = #{key,jdbcType=VARCHAR},
+      `version` = #{version,jdbcType=INTEGER},
       `desc` = #{desc,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=VARCHAR},
       `release_erp` = #{releaseErp,jdbcType=VARCHAR},
@@ -303,13 +338,29 @@
       `update_time` = #{updateTime,jdbcType=TIMESTAMP}
     where `id` = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.PlatformUserInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithBLOBsWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from platform_user_info
+    ,
+    <include refid="Blob_Column_List" />
+    from platform_dict
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jd.security.llmsec.data.pojo.PlatformDictExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from platform_dict
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
