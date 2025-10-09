@@ -155,7 +155,7 @@ services:
 
   safety-bert:
     container_name: safety-bert
-    image: ccr.ccs.tencentyun.com/joysafety/joysafety:safety-bert-0.0.1
+    image: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/ghcr.io/glei16/safety-bert:0.0.1
     #restart: always
     environment:
       BERT_CONFIG_FILE: /work/conf/conf_example.json
