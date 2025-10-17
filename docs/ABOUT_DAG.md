@@ -5,7 +5,7 @@
 
 ### 什么是策略配置DAG？
 
-JoySafety采用**有向无环图（DAG）**来编排安全检测策略，每个策略从`rootId`对应的节点开始，逐层执行识别策略。这种设计具有以下优势：
+JoySafety采用 **有向无环图（DAG）** 来编排安全检测策略，每个策略从`rootId`对应的节点开始，逐层执行识别策略。这种设计具有以下优势：
 
 - **灵活性**：支持复杂的条件分支
 - **高性能**：支持并行处理
@@ -122,7 +122,6 @@ JoySafety采用**有向无环图（DAG）**来编排安全检测策略，每个�
     conf:
       ignoreRiskCode:               # 忽略的风险码
         - 2001
-      enableCache: true             # 启用缓存
   routerConf:
     type: groovy
     name: keyword_router
@@ -196,7 +195,6 @@ JoySafety采用**有向无环图（DAG）**来编排安全检测策略，每个�
     conf:
       threshold: 0.8               # 相似度阈值
       topK: 3                      # 返回答案数量
-      enableCache: true            # 启用缓存
   routerConf:
     type: stupid_end               # 直接结束
     name: stupid_end
