@@ -27,11 +27,6 @@
     </scm>
 
     <developers>
-        <developer>
-            <id>1</id>
-            <name>sunyaofei3</name>
-            <email>sunyaofei3@jd.com</email>
-        </developer>
     </developers>
 
     <properties>
